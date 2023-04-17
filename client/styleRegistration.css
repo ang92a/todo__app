@@ -1,0 +1,63 @@
+body {
+    background: #eee;
+}
+
+.Myform {
+    width: 300px;
+    height: auto;
+    background: #fff;
+    border-radius: 10px;
+    margin: 10% auto;
+    box-shadow: 2px 2px 4px 0px #000000;
+
+}
+
+.Myform h1 {
+    margin: 0;
+    background-color: #282830;
+    border-radius: 10px 10px 0 0;
+    color: #fff;
+    font-size: 14px;
+    padding: 20px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.inp {
+    padding: 20px;
+}
+
+.log {
+    border: 1px solid #dcdcdc;
+    padding: 12px 10px;
+    width: 260px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.pass {
+    border: 1px solid #dcdcdc;
+    padding: 12px 10px;
+    width: 260px;
+    border-radius: 5px;
+}
+
+.btn {
+    background: #1dabb8;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    margin: 10px 0 0 0;
+    padding: 12px 20px;
+    border: none;
+}
+
+
+a {
+    color: #999;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #1dabb8;
+}

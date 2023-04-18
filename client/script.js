@@ -26,31 +26,33 @@ async function createPage() {
   };
 
   let btn = box.querySelector(".btn");
-  btn.addEventListener("click", () => answerServer());
-
-  // Отправляется на сервер
-  async function answerServer() {
-    let response = await fetch("http://localhost:5000/user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
-    return await response.json();
-  }
-  let result = await answerServer();
+  btn.addEventListener("click", () => answerServer(user));
 
   //Функция получает массив с сервера со списком дел и их статусом
-  let arr = result.todo;
-  console.log(result.todo);
 
-  btn.addEventListener("click", () => resultServer(arr));
+  let result = await answerServer(user); // дожидаемся ответа от сервера в виде обьекта
+
+  // console.log(result.todo);
+
+  btn.addEventListener("click", () => resultServer(result.todo)); // отрисовываем туду по полученному массиву
+}
+
+// Отправляется на сервер
+
+async function answerServer(obj) {
+  let response = await fetch("http://localhost:5000/user", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(obj),
+  });
+  return await response.json(); 
 }
 
 // функция для отрисовки тудушника
 
-function resultServer(list) {
+function resultServer() {
   box.inner = `<h1 class="title">ToDo List</h1>
 <div class="todo">
     <div class="form__wrapper">

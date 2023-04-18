@@ -15,14 +15,14 @@ app.use(express.json());
 //обработчик запроса
 app.post("/user", (req, res) => {
   const { login, password } = req.body;
-  console.log(users);
+  // console.log(users);
   let user = users.find((user) => user.login === login);
 
   if (user) {
     if (user.password === password) {
       res.json({
         message: "вход",
-        todo: user.todo,
+        todo: user.todo ?? [],
       });
     } else {
       res.status(401).json({ mes: "Неверный пароль" });

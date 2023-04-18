@@ -2,7 +2,7 @@
 
 const box = document.querySelector(".box");
 
-function createPage() {
+async function createPage() {
   // отрисовывается форма регистрации
 
   box.innerHTML = `<div class="Myform">
@@ -26,9 +26,10 @@ function createPage() {
   };
 
   let btn = box.querySelector(".btn");
-  btn.addEventListener("click", async () => {
-    // Отправляется на сервер
+  btn.addEventListener("click", () => answerServer());
 
+  // Отправляется на сервер
+  async function answerServer() {
     let response = await fetch("http://localhost:5000/user", {
       method: "POST",
       headers: {
@@ -36,18 +37,20 @@ function createPage() {
       },
       body: JSON.stringify(user),
     });
-    let result = await response.json();
+    return await response.json();
+  }
+  let result = await answerServer();
 
-    //Функция получает массив с сервера со списком дел и их статусом
-    // console.log(result);
-    let arr = (result.todo = []);
-    answerServer(arr);
-  });
+  //Функция получает массив с сервера со списком дел и их статусом
+  let arr = result.todo;
+  console.log(result.todo);
+
+  btn.addEventListener("click", () => resultServer(arr));
 }
 
 // функция для отрисовки тудушника
 
-function answerServer(list) {
+function resultServer(list) {
   box.inner = `<h1 class="title">ToDo List</h1>
 <div class="todo">
     <div class="form__wrapper">
@@ -64,16 +67,16 @@ function answerServer(list) {
     </div>
 </div> `;
 
-  let info = box.querySelector(".info");
-  const input = box.querySelector(".input");
-  const button = box.querySelector(".button");
-  const form = box.querySelector(".form");
-  const delAll = box.querySelector(".delAll");
-  const delEnd = box.querySelector(".delEnd");
+  // let info = box.querySelector(".info");
+  // const input = box.querySelector(".input");
+  // const button = box.querySelector(".button");
+  // const form = box.querySelector(".form");
+  // const delAll = box.querySelector(".delAll");
+  // const delEnd = box.querySelector(".delEnd");
 
-  list.forEach((el) => {
-    info.append(createList(el));
-  });
+  // list.forEach((el) => {
+  //   info.append(createList(el));
+  // });
 }
 
 //3/Отрисовываем один Todo

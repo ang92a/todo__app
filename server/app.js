@@ -31,8 +31,23 @@ app.post("/user", (req, res) => {
     }
   } else {
     users.push({ login, password });
-    res.status(201).json({ massage: "Создан" });
+    res.json({
+      // возвращяет запрос клиенту
+      massage: "Создан",
+      todo: [],
+    });
   }
+});
+
+//обработчик запроса для добавления в массив на сервере
+
+app.post("/task", (req, res) => {
+  // req - обьект приходит от клинента
+  const { text, status } = req.body; // разобрали обьект
+
+  let user = users.find((user) => user.login === login);
+  user.push({ text, status });
+  req.status(201).json({ massage: "Добавлен на сервер" });
 });
 
 // app.get("/data", (req, res) => {

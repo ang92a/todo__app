@@ -2,7 +2,7 @@
 
 let box = document.querySelector(".box");
 let myForm = document.querySelector(".myform");
-let form = document.querySelector(".regisrration");
+let formreg = document.querySelector(".regisrration");
 let log = document.querySelector(".log");
 let pass = document.querySelector(".pass");
 let btn = document.querySelector(".btn");
@@ -10,8 +10,16 @@ let btn = document.querySelector(".btn");
 // ToDo
 
 let mytodo = document.querySelector(".mytodo");
+const input = document.querySelector(".input");
+const button = document.querySelector(".button");
+const form = document.querySelector(".form");
+const info = document.querySelector(".info");
+const del = document.querySelector(".delete");
+const delAll = document.querySelector(".delAll");
+const delEnd = document.querySelector(".delEnd");
 
 // Отправляется на сервер
+formreg.addEventListener("submit", (event) => event.preventDefault());
 form.addEventListener("submit", (event) => event.preventDefault());
 
 async function server() {
@@ -20,23 +28,18 @@ async function server() {
     password: pass.value,
   };
 
-  try {
-    let response = await fetch("http://localhost:5000/user", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
+  let response = await fetch("http://localhost:5000/user", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(user),
+  });
 
-    let data = await response.json();
-    console.log(data);
-  } catch (error) {
-    console.log(error.massage);
-  }
+  let data = await response.json();
+  console.log(data);
+  // addlist(data);
 }
-
-btn.addEventListener("click", server);
 
 // Функция для отрисовки страницы todo после регистрации
 
@@ -47,15 +50,15 @@ btn.addEventListener("click", () => {
 
 //*************************************************************************************************************************** */
 
+// массив кужа будут добавляться задаси и отправляться на
+
 //1/Создание массива с данными
-const addlist = (evt) => {
-  evt.preventDefault(); //Отменяем стандартное поведение (обновление страницы при отправке формы)
+function addlist(array) {
   let value = input.value; // создаем переменную и присваеваем введенное в импут
 
   //Добавляем новый объект в массив
   if (value.length) {
-    list.push({
-      id: Date.now(),
+    array.push({
       text: value,
       status: false, // задаем значение по умолчанию
     });
@@ -63,16 +66,15 @@ const addlist = (evt) => {
   input.value = ""; // после нажатия ентер возвращяет пустую строку(стандартное поведение формы в браузере)
   input.focus(); // Не теряем фокус с инпута
   renderList(); // Отрисовка
-};
+}
 
 //2/Отрисовываем  каждый раз при изменеии массива, вынесена для удобства
-function renderList() {
+function renderList(array) {
   info.innerHTML = ""; // для избежания повторов, сначала очищяет,потом отрисовывает проходясь по массиву
-  localStorage.setItem(LS_USER_KEY, JSON.stringify(list)); // приводим к строке и в локалсторидж
-  list.forEach((el) => {
+  array.forEach((el) => {
     info.append(createList(el));
   });
-  if (list.length) {
+  if (array.length) {
     info.classList.add("showInfo");
     del.classList.add("showDelete");
   } else {
@@ -145,6 +147,7 @@ const deleteEnd = () => {
 
 renderList();
 
+btn.addEventListener("click", server);
+button.addEventListener("click", () => addlist);
 delEnd.addEventListener("click", deleteEnd);
-button.addEventListener("click", addlist);
 delAll.addEventListener("click", deleteList);

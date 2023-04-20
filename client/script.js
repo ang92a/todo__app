@@ -1,33 +1,34 @@
 // Форма регистрации
 
 let box = document.querySelector(".box");
+
 let myForm = document.querySelector(".myform");
 let formreg = document.querySelector(".regisrration");
 let log = document.querySelector(".log");
 let pass = document.querySelector(".pass");
 let btn = document.querySelector(".btn");
 
-// ToDo
-
+let input = document.querySelector(".input");
+let button = document.querySelector(".button");
+let form = document.querySelector(".form");
+let info = document.querySelector(".info");
+let del = document.querySelector(".delete");
+let delAll = document.querySelector(".delAll");
+let delEnd = document.querySelector(".delEnd");
 let mytodo = document.querySelector(".mytodo");
-const input = document.querySelector(".input");
-const button = document.querySelector(".button");
-const form = document.querySelector(".form");
-const info = document.querySelector(".info");
-const del = document.querySelector(".delete");
-const delAll = document.querySelector(".delAll");
-const delEnd = document.querySelector(".delEnd");
+let myform = document.querySelector(".myform");
 
-// Отправляется на сервер
 formreg.addEventListener("submit", (event) => event.preventDefault());
 form.addEventListener("submit", (event) => event.preventDefault());
 
-async function server() {
-  let user = {
-    login: log.value,
-    password: pass.value,
-  };
+let data;
 
+let user = {
+  login: log.value,
+  password: pass.value,
+};
+
+async function server() {
   let response = await fetch("http://localhost:5000/user", {
     method: "POST",
     headers: {
@@ -35,30 +36,33 @@ async function server() {
     },
     body: JSON.stringify(user),
   });
-
-  let data = await response.json();
+  let res = await response.json();
+  data = res.todo;
   console.log(data);
-  // addlist(data);
 }
 
-// Функция для отрисовки страницы todo после регистрации
+btn.addEventListener("click", server);
 
 btn.addEventListener("click", () => {
   myForm.style.display = "none";
   mytodo.style.display = "block";
 });
 
-//*************************************************************************************************************************** */
+const LS_USER_KEY = "KEY"; // ключ для локалсторедж
 
-// массив кужа будут добавляться задаси и отправляться на
+const savedlist = JSON.parse(localStorage.getItem(LS_USER_KEY)) ?? []; // если в локалсторедж есть данные в виде строки,
+// то они достаются и формируются в массив из обьектов, если ничего не введено, то возвращяется пустой массив
+let list = savedlist; // присваиваем получившийся массив
 
 //1/Создание массива с данными
-function addlist(array) {
+const addlist = (evt) => {
+  evt.preventDefault(); //Отменяем стандартное поведение (обновление страницы при отправке формы)
   let value = input.value; // создаем переменную и присваеваем введенное в импут
 
   //Добавляем новый объект в массив
   if (value.length) {
-    array.push({
+    list.push({
+      // id: Date.now(),
       text: value,
       status: false, // задаем значение по умолчанию
     });
@@ -66,15 +70,16 @@ function addlist(array) {
   input.value = ""; // после нажатия ентер возвращяет пустую строку(стандартное поведение формы в браузере)
   input.focus(); // Не теряем фокус с инпута
   renderList(); // Отрисовка
-}
+};
 
 //2/Отрисовываем  каждый раз при изменеии массива, вынесена для удобства
-function renderList(array) {
+function renderList() {
   info.innerHTML = ""; // для избежания повторов, сначала очищяет,потом отрисовывает проходясь по массиву
-  array.forEach((el) => {
+  localStorage.setItem(LS_USER_KEY, JSON.stringify(list)); // приводим к строке и в локалсторидж
+  list.forEach((el) => {
     info.append(createList(el));
   });
-  if (array.length) {
+  if (list.length) {
     info.classList.add("showInfo");
     del.classList.add("showDelete");
   } else {
@@ -147,7 +152,6 @@ const deleteEnd = () => {
 
 renderList();
 
-btn.addEventListener("click", server);
-button.addEventListener("click", () => addlist);
 delEnd.addEventListener("click", deleteEnd);
+button.addEventListener("click", addlist);
 delAll.addEventListener("click", deleteList);
